@@ -16,7 +16,7 @@ const User = require('../models/user'),
 const Jwt = require('../middlewares/jwt');
 
 // import helper libraries
-const Helpers = require('../helpers/core');
+const Core = require('../helpers/core');
 
 // init router
 const router = express.Router();
@@ -39,7 +39,7 @@ router.post('/', (req, res) => {
   // to be assigned after fitting data to model 
   let formattedData;
 
-  return Helpers.fitDataToModel(User.model, data)
+  return Core.fitDataToModel(User.model, data)
     .then(data => formattedData = data)
     .then(() => User.list(formattedData.email))
     .then(user => !user.length ? User.hash(formattedData.password) : Promise.reject('exists'))
@@ -59,9 +59,9 @@ router.post('/login', (req, res) => {
 
   if (!data || !data.email || !data.password) return res.status(422).send({status: 'error', message: 'unprocessable entity'});
 
-  return User.list(data.email || null)
+  return User.list(data.email)
     .then(user => user.length ? user[0] : Promise.reject('does not exist'))
-    .then(user => Promise.all([User.compare(data.password || null, user.password), user]))
+    .then(user => Promise.all([User.compare(data.password, user.password), user]))
     .then(([result, user]) => result ? Auth.createJWT({id: user.id}) : Promise.reject('did not match'))
     .then(jwt => res.send({status: 'success', message: 'logged in', data: jwt}))
     .catch(err => {console.error(err); return res.status(403).send({status: 'error', message: ''})});

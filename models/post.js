@@ -9,7 +9,6 @@ const knexConfig = require('../knexfile.js'),
       knex = require('knex')(knexConfig[ENV]);
 
 // define post model
-// put only required (not nullable) fields here
 const model = {
   user_id: null
 };

@@ -12,11 +12,14 @@ const fitDataToModel = (model, data) => {
     if (!fields.includes(field)) continue;
     model[field] = data[field];
   }
+
+  let missingFields = [];
   // check all required fields in model have be assigned
   for (let field in model) {
-    if (!model[field]) return Promise.reject('missing fields');
+    if (!model[field]) missingFields = [...missingFields, field]
   }
-  return Promise.resolve(model);
+
+  return missingFields.length ? Promise.reject(`missing required fields:\n${missingFields.join(', ')}`) : Promise.resolve(model);
 }
 
 module.exports = {
