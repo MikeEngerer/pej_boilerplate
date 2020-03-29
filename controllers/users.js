@@ -36,8 +36,7 @@ router.post('/', (req, res) => {
   return User.list(data.email || null)
     .then(user => !user.length ? User.hash(data.password) : Promise.reject('exists'))
     .then(hash => data.password = hash)
-    .then(hash => User.create(data))
-    .then(user => req.session.id = user.id)
+    .then(() => User.create(data))
     .then(() => res.send({status: 'success', message: 'created'}))
     .catch(err => {console.log(err); return res.status(500).send({status: 'error', message: ''})});
 

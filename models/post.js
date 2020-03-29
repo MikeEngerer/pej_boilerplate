@@ -8,12 +8,12 @@ const ENV = process.env.ENV || "development";
 const knexConfig = require('../knexfile.js'),
       knex = require('knex')(knexConfig[ENV]);
 
-// CRUD ops on Posts table
-const create = (data) => knex('Posts').insert(data).returning('*'),
-      retrieve = (id) => knex('Posts').where({id}).returning('*'),
-      list = (user_id) => knex('Posts').where({user_id}).returning('*'),
-      update = (id, data) => knex('Posts').where({id}).update(data).returning('*'),
-      del = (id) => knex('Posts').where({id}).del().returning('*');
+// CRUD ops on posts table
+const create = (data) => knex('posts').insert(data).returning('*'),
+      retrieve = (id) => knex('posts').where({id}).returning('*'),
+      list = (user_id) => knex('posts').where({user_id}).returning('*'),
+      update = (id, data) => knex('posts').where({id}).update(data).returning('*'),
+      del = (id) => knex('posts').where({id}).del().returning('*');
 
 module.exports = {
   create,

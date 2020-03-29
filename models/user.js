@@ -11,12 +11,12 @@ const ENV = process.env.ENV || "development";
 const knexConfig = require('../knexfile'),
       knex = require('knex')(knexConfig[ENV]);
 
-// CRUD ops on Users table
-const create = (data) => knex('Users').insert(data).returning('*'),
-      retrieve = (id) => knex('Users').where({id}).returning('*'),
-      list = (email) => knex('Users').where({email}).returning('*'),
-      update = (id, data) => knex('Users').where({id}).update(data).returning('*'),
-      del = (id) => knex('Users').where({id}).del().returning('*');
+// CRUD ops on users table
+const create = (data) => knex('users').insert(data).returning('*'),
+      retrieve = (id) => knex('users').where({id}).returning('*'),
+      list = (email) => knex('users').where({email}).returning('*'),
+      update = (id, data) => knex('users').where({id}).update(data).returning('*'),
+      del = (id) => knex('users').where({id}).del().returning('*');
 
 // hash a string
 const hash = (str) => new Promise((resolve, reject) => bcrypt.hash(str, 10, (err, hash) => err ? reject(err) : resolve(hash)));
