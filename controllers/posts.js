@@ -14,6 +14,7 @@ const Post = require('../models/post');
 // import middleware
 const Jwt = require('../middlewares/jwt');
 
+const Helpers = require('../helpers/core')
 // init router
 const router = express.Router();
 
@@ -33,7 +34,7 @@ router.get('/', (req, res) => {
   // fetch list of posts from db
   return Post.list(id)
     .then(posts => res.send({status: 'success', message: 'retrieved', data: posts}))
-    .catch(err => res.status(500).send({status: 'error', message: ''}));
+    .catch(err => {console.error(err); res.status(500).send({status: 'error', message: ''})});
 });
 
 // POST /posts:
@@ -45,9 +46,10 @@ router.post('/', (req, res) => {
   data.user_id = id;
 
   // create post 
-  return Post.create(data)
+  return Helpers.fitDataToModel(Post.model, data)
+    .then(data => Post.create(data))
     .then(resp => res.send({status: 'success', message: 'created'}))
-    .catch(err => res.status(500).send({status: 'error', message: ''}));
+    .catch(err => {console.error(err); res.status(500).send({status: 'error', message: ''})});
 });
 
 // GET /posts/:post_id:
@@ -59,7 +61,7 @@ router.get('/:post_id', (req, res) => {
   // fetch post by post_id
   return Post.retrieve(post_id)
     .then(post => res.send({status: 'success', message: 'retrieved', post}))
-    .catch(err => res.status(500).send({status: 'error', message: ''}));
+    .catch(err => {console.error(err); res.status(500).send({status: 'error', message: ''})});
 });
 
 // DELETE /posts/:post_id:
@@ -71,7 +73,7 @@ router.delete('/:post_id', (req, res) => {
   // delete post from db
   return Post.del(post_id)
     .then(result => res.send({status: 'success', message: 'deleted'}))
-    .catch(err => res.status(500).send({status: 'error', message: ''}));
+    .catch(err => {console.error(err); res.status(500).send({status: 'error', message: ''})});
 });
 
 // PATCH /:post_id:
@@ -82,9 +84,10 @@ router.patch('/:post_id', (req, res) => {
         { data } = req.body;
 
   // update a post with { data } by post_id
-  return Post.update(post_id, data)
+  Helpers.fitDataToModel(Post.model, data)
+    .then(data => Post.update(post_id, data))
     .then(result => res.send({status: 'success', message: 'updated'}))
-    .catch(err => res.status(500).send({status: 'error', message: ''}));
+    .catch(err => {console.error(err); res.status(500).send({status: 'error', message: ''})});
 });
 
 module.exports = router;

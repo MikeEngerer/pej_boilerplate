@@ -11,6 +11,12 @@ const ENV = process.env.ENV || "development";
 const knexConfig = require('../knexfile'),
       knex = require('knex')(knexConfig[ENV]);
 
+// define user model
+const model = {
+  email: null,
+  password: null
+};
+
 // CRUD ops on users table
 const create = (data) => knex('users').insert(data).returning('*'),
       retrieve = (id) => knex('users').where({id}).returning('*'),
@@ -25,6 +31,7 @@ const hash = (str) => new Promise((resolve, reject) => bcrypt.hash(str, 10, (err
 const compare = (str, hash) => new Promise((resolve, reject) => bcrypt.compare(str, hash, (err, result) => err ? reject(err) : (result ? resolve(result) : reject('does not match'))));
 
 module.exports = {
+  model,
   create,
   retrieve,
   list,

@@ -15,6 +15,9 @@ const User = require('../models/user'),
 // import middleware
 const Jwt = require('../middlewares/jwt');
 
+// import helper libraries
+const Helpers = require('../helpers/core');
+
 // init router
 const router = express.Router();
 
@@ -31,14 +34,19 @@ router.post('/', (req, res) => {
   // data = { email, password }
   const { data } = req.body;
 
-  if (!data || !data.email || !data.password) return res.status(422).send({status: 'error', message: 'unprocessable entity'});
+  if (!data) return res.status(422).send({status: 'error', message: 'unprocessable entity'});
 
-  return User.list(data.email || null)
-    .then(user => !user.length ? User.hash(data.password) : Promise.reject('exists'))
-    .then(hash => data.password = hash)
-    .then(() => User.create(data))
+  // to be assigned after fitting data to model 
+  let formattedData;
+
+  return Helpers.fitDataToModel(User.model, data)
+    .then(data => formattedData = data)
+    .then(() => User.list(formattedData.email))
+    .then(user => !user.length ? User.hash(formattedData.password) : Promise.reject('exists'))
+    .then(hash => formattedData.password = hash)
+    .then(() => User.create(formattedData))
     .then(() => res.send({status: 'success', message: 'created'}))
-    .catch(err => {console.log(err); return res.status(500).send({status: 'error', message: ''})});
+    .catch(err => {console.error(err); return res.status(500).send({status: 'error', message: ''})});
 
 });
 

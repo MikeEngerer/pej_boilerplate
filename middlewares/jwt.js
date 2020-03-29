@@ -20,10 +20,10 @@ const verify = (req, res, next) => {
 
   if (!data || !data.id) return res.status(401).send({status: 'error', message: 'unauthorized'});
 
-  const { id } = data.id;
+  const { id } = data;
   // merge req.body with id
   // req.body = { id, data }
-  req.body = { id, data: { ...req.body } };
+  req.body = { id, ...req.body };
 
   return next();
 }
@@ -31,4 +31,4 @@ const verify = (req, res, next) => {
 
 module.exports = {
   verify
-}
+};

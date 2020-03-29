@@ -8,6 +8,12 @@ const ENV = process.env.ENV || "development";
 const knexConfig = require('../knexfile.js'),
       knex = require('knex')(knexConfig[ENV]);
 
+// define post model
+// put only required (not nullable) fields here
+const model = {
+  user_id: null
+};
+
 // CRUD ops on posts table
 const create = (data) => knex('posts').insert(data).returning('*'),
       retrieve = (id) => knex('posts').where({id}).returning('*'),
@@ -16,6 +22,7 @@ const create = (data) => knex('posts').insert(data).returning('*'),
       del = (id) => knex('posts').where({id}).del().returning('*');
 
 module.exports = {
+  model,
   create,
   retrieve,
   list,
