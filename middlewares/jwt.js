@@ -15,13 +15,14 @@ const verify = (req, res, next) => {
 
   if (!token) return res.status(401).send({status: 'error', message: 'unauthorized'});
 
+  // data = { id }
   const data = jwt.verify(token, JWT_SECRET);
 
   if (!data || !data.id) return res.status(401).send({status: 'error', message: 'unauthorized'});
 
   const { id } = data.id;
-  // merge req.body with user id
-  // results in req.body = { id, data }
+  // merge req.body with id
+  // req.body = { id, data }
   req.body = { id, data: { ...req.body } };
 
   return next();

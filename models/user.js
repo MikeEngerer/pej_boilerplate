@@ -12,7 +12,6 @@ const knexConfig = require('../knexfile'),
       knex = require('knex')(knexConfig[ENV]);
 
 // CRUD ops on Users table
-// all return promises
 const create = (data) => knex('Users').insert(data).returning('*'),
       retrieve = (id) => knex('Users').where({id}).returning('*'),
       list = (email) => knex('Users').where({email}).returning('*'),

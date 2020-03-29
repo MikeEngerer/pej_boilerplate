@@ -27,9 +27,12 @@ router.use(Jwt.verify);
 // GET /posts:
 // fetch a list of posts
 router.get('/', (req, res) => {
+
+  const { id } = req.body;
+
   // fetch list of posts from db
   return Post.list(id)
-    .then(posts => res.send({status: 'success', message: 'retrieved', posts}))
+    .then(posts => res.send({status: 'success', message: 'retrieved', data: posts}))
     .catch(err => res.status(500).send({status: 'error', message: ''}));
 });
 
@@ -37,12 +40,7 @@ router.get('/', (req, res) => {
 // create post
 router.post('/', (req, res) => {
 
-  const { data } = req.body,
-        { id } = req.session;
-  // not logged in
-  if (!id) return res.status(403).send({status: 'error', message: 'forbidden'});
-  // missing data
-  if (!data) return res.status(422).send({status: 'error', message: 'unprocessable entity'});
+  const { id, data } = req.body;
 
   data.user_id = id;
 
@@ -56,14 +54,9 @@ router.post('/', (req, res) => {
 // retrieve a single post
 router.get('/:post_id', (req, res) => {
 
-  const { post_id } = req.params,
-        { id } = req.session;
-  // not logged in
-  if (!id) return res.status(403).send({status: 'error', message: 'forbidden'});
-  // missing data
-  if (!post_id) return res.status(422).send({status: 'error', message: 'unprocessable entity'});
+  const { post_id } = req.params;
 
-  // fetch post from db
+  // fetch post by post_id
   return Post.retrieve(post_id)
     .then(post => res.send({status: 'success', message: 'retrieved', post}))
     .catch(err => res.status(500).send({status: 'error', message: ''}));
@@ -73,13 +66,7 @@ router.get('/:post_id', (req, res) => {
 // delete a single post
 router.delete('/:post_id', (req, res) => {
 
-  const { post_id } = req.params,
-        { id } = req.session;
-
-  // not logged in
-  if (!id) return res.status(403).send({status: 'error', message: 'forbidden'});
-  // missing data
-  if (!post_id) return res.status(422).send({status: 'error', message: 'unprocessable entity'});
+  const { post_id } = req.params;
 
   // delete post from db
   return Post.del(post_id)
@@ -92,15 +79,9 @@ router.delete('/:post_id', (req, res) => {
 router.patch('/:post_id', (req, res) => {
 
   const { post_id } = req.params,
-        { id } = req.session,
         { data } = req.body;
 
-  // not logged in
-  if (!id) return res.status(403).send({status: 'error', message: 'forbidden'});
-  // missing data
-  if (!post_id || !data) return res.status(422).send({status: 'error', message: 'unprocessable entity'});
-
-  // 
+  // update a post with { data } by post_id
   return Post.update(post_id, data)
     .then(result => res.send({status: 'success', message: 'updated'}))
     .catch(err => res.status(500).send({status: 'error', message: ''}));
