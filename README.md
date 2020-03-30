@@ -1,6 +1,6 @@
 # PEJ Boilerplate
 
-The foundation for an MVC style Postgresql, Express and Json Web Token web app. 
+The foundation for an MVC style Postgresql, Express, and Json Web Token web app. 
 
 Comes equipped with models, controllers, and middleware.
 
