@@ -5,16 +5,18 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node verifyEnv.js && node server.js"
+    "start": "nodemon",
+    "prestart": "node scripts/verifyEnv.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^6.2.0",
-    "body-parser": "^1.18.3",
-    "knex": "^0.16.3",
-    "pg": "^7.8.0",
     "bcrypt": "^3.0.0",
-    "jsonwebtoken": "^8.5.1"
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.16.3",
+    "nodemon": "^2.0.2",
+    "pg": "^7.8.0"
   }
 }

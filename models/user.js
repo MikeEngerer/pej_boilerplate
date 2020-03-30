@@ -13,8 +13,13 @@ const knexConfig = require('../knexfile'),
 
 // define user model
 const model = {
-  email: null,
-  password: null
+  required: {
+    email: null,
+    password: null
+  }, 
+  optional: {
+    
+  }
 };
 
 // CRUD ops on users table

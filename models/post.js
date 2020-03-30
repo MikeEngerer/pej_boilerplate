@@ -10,7 +10,12 @@ const knexConfig = require('../knexfile.js'),
 
 // define post model
 const model = {
-  user_id: null
+  required: {
+    user_id: null
+  },
+  optional: {
+    
+  }
 };
 
 // CRUD ops on posts table
